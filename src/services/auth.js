@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 function AuthService() {
@@ -16,6 +17,12 @@ function AuthService() {
         },
         checkPassword: async (password, hash) => {
             return bcrypt.compare(password, hash);
+        },
+        getToken: async (user) => {
+            return jwt.sign(user.id, SELF.salt, {expiresIn: '12h'});
+        },
+        verifyToken: async (token) => {
+            return jwt.verify(token, SELF.salt);
         }
     }
 

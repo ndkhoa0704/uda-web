@@ -26,12 +26,25 @@ function UserController() {
             if (userDB) {
                 const isPasswordMatch = await AuthService.checkPassword(password, userDB.hashedPassword);
                 if (isPasswordMatch) {
-                    return res.status(200).json(userDB);
+                    res.cookie('token', await AuthService.getToken(userDB))
+                    return res.status(200).json({token: await AuthService.getToken(userDB)});
                 } else {
                     return res.status(401).json({message: 'Invalid username or password'});
                 }
             }
         },
+        verifyLogin: async (req, res, next) => {
+            const token = req.cookies.token;
+            if (!token) {
+                return res.status(401).json({message: 'No token provided'});
+            }
+            const user = await AuthService.verifyToken(token);
+            if (user) {
+                return next();
+            } else {
+                return res.status(401).json({message: 'Invalid token'});
+            }
+        }
     }
 }
 
