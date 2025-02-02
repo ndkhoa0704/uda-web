@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue Blog</title>
+    <link rel="stylesheet" href="styles/uda.css">
+</head>
+<body>
+<div id="app">
+    <header>
+        <div class="logo" @click="goHome">Logo</div>
+        <div class="auth-btns">
+            <button @click="signUp">Sign Up</button>
+            <button @click="logIn">Log In</button>
+        </div>
+    </header>
+
+    <main>
+        <div v-if="currentView === 'home'">
+            <div class="article-list">
+                <div v-for="article in paginatedArticles" class="article-preview" @click="showArticle(article)">
+                    <h2>{{ article.title }}</h2>
+                </div>
+            </div>
+            <button v-if="articles.length > articlesPerPage" @click="nextPage">Next Page</button>
+        </div>
+        <div v-if="currentView === 'article'">
+            <button @click="goHome">Back to Articles</button>
+            <h2>{{ currentArticle.title }}</h2>
+            <p>{{ currentArticle.content }}</p>
+        </div>
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+<script src="js/uda.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f8f8;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.auth-btns button {
+    margin-left: 10px;
+}
+
+.main {
+    margin: 20px;
+}
+
+.article-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.article-preview {
+    margin-bottom: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+button {
+    cursor: pointer;
+    padding: 5px 15px;
+    margin-top: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
