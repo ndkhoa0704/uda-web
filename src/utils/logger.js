@@ -19,7 +19,7 @@ const logger = winston.createLogger({
             )
         }),
         new transports.File({
-            filename: path.join(__dirname, 'logs', 'app.log'),
+            filename: path.join(__dirname, '../logs', 'app.log'),
             maxsize: 100 * 1024 * 1024, // 100 MB
             maxFiles: 7,
             tailable: true

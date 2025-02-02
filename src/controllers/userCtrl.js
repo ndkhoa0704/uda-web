@@ -1,19 +1,22 @@
 const {User} = require('../models/user');
-const {Op} = require('sequelize');
 const AuthService = require('../services/auth');
-
+const {isValidEmail} = require('../utils/utils');
 
 function UserController() {
     const SELF = {}
     return {
         createUser: async (req, res) => {
-            const {username, fullname, email, password, user_type} = req.body;
+            const {username, fullname, email, password} = req.body;
+            if (!isValidEmail(email)) {
+                return res.status(400).json({message: 'Invalid email'});
+            }
             const hashedPassword = await AuthService.hashPassword(password);
+            console.log(hashedPassword);
             return User.create({
-                username,
-                fullname,
-                email,
-                hashedPassword,
+                username: username.toLowerCase(),
+                fullname: fullname,
+                email: email,
+                password: hashedPassword,
             }).then(user => {
                 res.status(201).json(user);
             }).catch(err => {
@@ -24,7 +27,7 @@ function UserController() {
             const {username, password} = req.body;
             const userDB = User.findOne({where: {username: username}});
             if (userDB) {
-                const isPasswordMatch = await AuthService.checkPassword(password, userDB.hashedPassword);
+                const isPasswordMatch = await AuthService.checkPassword(password, userDB.password);
                 if (isPasswordMatch) {
                     res.cookie('token', await AuthService.getToken(userDB))
                     return res.status(200).json({token: await AuthService.getToken(userDB)});
@@ -34,7 +37,10 @@ function UserController() {
             }
         },
         verifyLogin: async (req, res, next) => {
-            const token = req.cookies.token;
+            if (req.url === '/user/login' || req.url === '/user/create') {
+                return next();
+            }
+            const token = req.cookies?.token;
             if (!token) {
                 return res.status(401).json({message: 'No token provided'});
             }
