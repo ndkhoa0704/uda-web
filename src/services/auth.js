@@ -15,13 +15,12 @@ function AuthService() {
             return bcrypt.compare(password, hash);
         },
         getToken: async (user) => {
-            return jwt.sign(user.id, SELF.salt, {expiresIn: '12h'});
+            return jwt.sign(user.id, SELF.salt, { expiresIn: '12h' });
         },
         verifyToken: async (token) => {
             return jwt.verify(token, SELF.salt);
         }
     }
-
 }
 
 module.exports = new AuthService()

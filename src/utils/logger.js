@@ -2,7 +2,7 @@ const winston = require('winston');
 const {transports, format} = winston;
 const path = require('path');
 
-const logger = winston.createLogger({
+const Logger = winston.createLogger({
     level: 'info',
     format: format.combine(
         format.timestamp(),
@@ -27,4 +27,4 @@ const logger = winston.createLogger({
     ]
 });
 
-module.exports = logger;
+module.exports = Logger;
