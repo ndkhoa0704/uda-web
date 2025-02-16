@@ -11,7 +11,6 @@ function UserController() {
                 return res.status(400).json({message: 'Invalid email'});
             }
             const hashedPassword = await AuthService.hashPassword(password);
-            console.log(hashedPassword);
             return User.create({
                 username: username.toLowerCase(),
                 fullname: fullname,
