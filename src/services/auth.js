@@ -8,17 +8,16 @@ function AuthService() {
     };
     return {
         hashPassword: async (password) => {
-            const salt = await bcrypt.genSalt(SELF.salt_rounds);
-            return await bcrypt.hash(password, salt);
+            return await bcrypt.hash(password, await bcrypt.genSalt(SELF.salt_rounds));
         },
         checkPassword: async (password, hash) => {
-            return bcrypt.compare(password, hash);
+            return bcrypt.compare(password, await bcrypt.genSalt(SELF.salt_rounds));
         },
         getToken: async (user) => {
-            return jwt.sign(user.id, SELF.salt, { expiresIn: '12h' });
+            return jwt.sign(user.id, await bcrypt.genSalt(SELF.salt_rounds), { expiresIn: '12h' });
         },
         verifyToken: async (token) => {
-            return jwt.verify(token, SELF.salt);
+            return jwt.verify(token, await bcrypt.genSalt(SELF.salt_rounds));
         }
     }
 }

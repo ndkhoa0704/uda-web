@@ -1,5 +1,6 @@
-const {DataTypes} = require('sequelize');
-const {sequelize} = require('../services/db');
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../services/db');
+const { User } = require('./user');
 
 
 const Article = sequelize.define('article', {
@@ -21,6 +22,10 @@ const Article = sequelize.define('article', {
         allowNull: false
     }
 });
+
+Article.belongsTo(User, { foreignKey: 'author_id' });
+    
+
 
 module.exports = {
     Article: Article

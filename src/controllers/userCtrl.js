@@ -4,7 +4,9 @@ const { isValidEmail } = require('../utils/utils');
 const Logger = require('../utils/logger');
 
 function UserController() {
-    const SELF = {}
+    const SELF = {
+        excludedRoutes: ['/user/login', '/user/create', '/article']
+    }
     return {
         createUser: async (req, res) => {
             const { username, fullname, email, password } = req.body;
@@ -23,6 +25,9 @@ function UserController() {
             }).then(user => {
                 res.status(201).json(user);
             }).catch(err => {
+                if (err.name === 'SequelizeUniqueConstraintError') {
+                    return res.status(400).json({ message: 'Username or Email already exists' });
+                }
                 Logger.info('createdUser - error', err);
                 res.status(500).json({ msg: 'Error creating user' });
             });
@@ -41,7 +46,7 @@ function UserController() {
             }
         },
         verifyLogin: async (req, res, next) => {
-            if (req.url === '/user/login' || req.url === '/user/create') {
+            if (SELF.excludedRoutes.includes(req.url)) {
                 return next();
             }
             const token = req.cookies?.token;
